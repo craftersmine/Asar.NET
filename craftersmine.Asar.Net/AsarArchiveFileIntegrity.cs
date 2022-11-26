@@ -44,10 +44,15 @@ namespace craftersmine.Asar.Net
         public static async Task<AsarArchiveFileIntegrity> GetFileIntegrity(string filePath)
         {
             using (FileStream stream = File.OpenRead(filePath))
-                return await GetFileIntegrity(stream);
+                return await GetStreamIntegrityAsync(stream);
         }
-
-        public static async Task<AsarArchiveFileIntegrity> GetFileIntegrity(Stream stream)
+        
+        /// <summary>
+        /// Computes hashes for specified stream and returns <see cref="AsarArchiveFileIntegrity"/> with hashes
+        /// </summary>
+        /// <param name="stream">Data stream for computing hashes</param>
+        /// <returns>Stream integrity information</returns>
+        public static async Task<AsarArchiveFileIntegrity> GetStreamIntegrityAsync(Stream stream)
         {
             _sha256CryptoServiceProvider.Initialize();
 
