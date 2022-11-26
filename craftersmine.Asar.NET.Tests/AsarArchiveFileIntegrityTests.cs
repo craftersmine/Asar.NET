@@ -15,12 +15,15 @@ namespace craftersmine.Asar.NET.Tests
             Assert.IsNotNull(stream);
             Assert.AreNotEqual(0, stream.Length);
 
-            AsarArchiveFileIntegrity fileIntegrity = await AsarArchiveFileIntegrity.GetFileIntegrity(stream);
+            AsarArchiveFileIntegrity fileIntegrity = await AsarArchiveFileIntegrity.GetStreamIntegrityAsync(stream);
             Assert.IsNotNull(fileIntegrity);
             Assert.AreEqual(DataHash, fileIntegrity.Hash);
             Assert.AreEqual(BlockHash, fileIntegrity.Blocks[0]);
             Assert.AreEqual("SHA256", fileIntegrity.Algorithm);
             Assert.AreEqual(4 * 1024 * 1024, fileIntegrity.BlockSize);
+
+            bool isValid = await AsarArchiveFileIntegrity.ValidateStreamAsync(stream, fileIntegrity);
+            Assert.IsTrue(isValid);
         }
     }
 }
