@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -41,7 +41,30 @@ namespace craftersmine.Asar.Net
 
         private AsarArchiveFileIntegrity() {}
 
-        public static async Task<AsarArchiveFileIntegrity> GetFileIntegrity(string filePath)
+        /// <summary>
+        /// Creates a new instance of ASAR archive file integrity data
+        /// </summary>
+        /// <param name="blockSize">Size of one block for hashing</param>
+        /// <param name="algorithm">Algorithm used for hashing</param>
+        /// <param name="hash">Whole file hash</param>
+        /// <param name="blocks">Array of file blocks hashes</param>
+        public AsarArchiveFileIntegrity(int blockSize, string algorithm, string hash, string[] blocks)
+        {
+            BlockSize = blockSize;
+            Algorithm = algorithm;
+            Hash = hash;
+            Blocks = blocks;
+        }
+
+        /// <inheritdoc cref="AsarArchiveFileIntegrity"/>
+        public AsarArchiveFileIntegrity(string hash, string[] blocks) : this(InternalBlockSize, InternalAlgorithmName, hash, blocks) {}
+
+        /// <summary>
+        /// Computes file hashes for specified file and returns <see cref="AsarArchiveFileIntegrity"/> with hashes
+        /// </summary>
+        /// <param name="filePath">Path to file for computing hashes</param>
+        /// <returns>File integrity information</returns>
+        public static async Task<AsarArchiveFileIntegrity> GetFileIntegrityAsync(string filePath)
         {
             using (FileStream stream = File.OpenRead(filePath))
                 return await GetStreamIntegrityAsync(stream);
