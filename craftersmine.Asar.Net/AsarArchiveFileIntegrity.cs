@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -53,6 +53,44 @@ namespace craftersmine.Asar.Net
 
             return new AsarArchiveFileIntegrity()
                 {BlockSize = InternalBlockSize, Algorithm = InternalAlgorithmName, Blocks = blocks.ToArray(), Hash = hash};
+        }
+
+        /// <summary>
+        /// Validates file at specified path against specified integrity data and returns <see langword="true"/> if data is same, otherwise <see langword="false"/>
+        /// </summary>
+        /// <param name="filePath">Path to file for checks</param>
+        /// <param name="integrityData">Integrity data for checks</param>
+        /// <returns><see langword="true"/> if file valid, otherwise <see langword="false"/></returns>
+        public static async Task<bool> ValidateFileAsync(string filePath, AsarArchiveFileIntegrity integrityData)
+        {
+            using (FileStream fs = File.OpenRead(filePath))
+                return await ValidateStreamAsync(fs, integrityData);
+        }
+        
+        /// <summary>
+        /// Validates data in stream against specified integrity data and returns <see langword="true"/> if data is same, otherwise <see langword="false"/>
+        /// </summary>
+        /// <param name="stream">Data stream for checks</param>
+        /// <param name="integrityData">Integrity data for checks</param>
+        /// <returns><see langword="true"/> if file valid, otherwise <see langword="false"/></returns>
+        public static async Task<bool> ValidateStreamAsync(Stream stream, AsarArchiveFileIntegrity integrityData)
+        {
+            stream.Seek(0, SeekOrigin.Begin);
+            
+            AsarArchiveFileIntegrity streamIntegrity = await GetStreamIntegrityAsync(stream);
+
+            if (streamIntegrity.Algorithm != integrityData.Algorithm) return false;
+
+            if (streamIntegrity.BlockSize != integrityData.BlockSize) return false;
+
+            if (streamIntegrity.Hash != integrityData.Hash) return false;
+
+            if (streamIntegrity.Blocks.Length != integrityData.Blocks.Length) return false;
+
+            for (int i = 0; i < integrityData.Blocks.Length; i++)
+                if (streamIntegrity.Blocks[i] != integrityData.Blocks[i]) return false;
+
+            return true;
         }
 
         private static string ByteArrayToString(byte[] bytes)
