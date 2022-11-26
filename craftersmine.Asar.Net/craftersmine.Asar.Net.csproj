@@ -2,6 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<Version>0.0.1-dev</Version>
+	<Authors>craftersmine</Authors>
+	<Description>.NET implementaion of Electron ASAR archive library</Description>
+	<Copyright>Copyright © craftersmine 2022</Copyright>
+	<RepositoryUrl>https://github.com/craftersmine/Asar.NET</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+	<IncludeSymbols>True</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<DebugType>portable</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
