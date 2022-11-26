@@ -9,18 +9,33 @@ using System.Text.Json.Serialization;
 
 namespace craftersmine.Asar.Net
 {
-    public class AsarArchiveFileIntegrity
+    /// <summary>
+    /// Represents a ASAR archive file integrity information. This class cannot be inherited
+    /// </summary>
+    public sealed class AsarArchiveFileIntegrity
     {
         private const string InternalAlgorithmName = "SHA256";
         private const int InternalBlockSize = 4 * 1024 * 1024;
         private static readonly SHA256CryptoServiceProvider _sha256CryptoServiceProvider = new SHA256CryptoServiceProvider();
 
+        /// <summary>
+        /// Gets file block size
+        /// </summary>
         [JsonPropertyName("blockSize")]
         public int BlockSize { get; private set; }
+        /// <summary>
+        /// Gets file hashing algorithm
+        /// </summary>
         [JsonPropertyName("algorithm")]
         public string Algorithm { get; private set; }
+        /// <summary>
+        /// Gets whole file hash
+        /// </summary>
         [JsonPropertyName("hash")]
         public string Hash { get; private set; }
+        /// <summary>
+        /// Gets hashes for file blocks of specified size
+        /// </summary>
         [JsonPropertyName("blocks")]
         public string[] Blocks { get; private set; }
 
