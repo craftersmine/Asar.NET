@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -82,16 +82,21 @@ namespace craftersmine.Asar.Net
             List<string> blocks = new List<string>();
             int currentOffset = 0;
 
-            while (stream.Position != stream.Length)
+            if (stream.Length > InternalBlockSize)
             {
-                byte[] buffer = new byte[InternalBlockSize];
-                isEndOfStream = await stream.ReadAsync(buffer, currentOffset, buffer.Length) == 0;
-                string block = ByteArrayToString(_sha256CryptoServiceProvider.ComputeHash(buffer));
-                blocks.Add(block);
-                currentOffset += InternalBlockSize;
+                while (stream.Position != stream.Length)
+                {
+                    byte[] buffer = new byte[InternalBlockSize];
+                    isEndOfStream = await stream.ReadAsync(buffer, currentOffset, buffer.Length) == 0;
+                    string block = ByteArrayToString(_sha256CryptoServiceProvider.ComputeHash(buffer));
+                    blocks.Add(block);
+                    currentOffset += InternalBlockSize;
+                }
             }
 
             string hash = ByteArrayToString(_sha256CryptoServiceProvider.ComputeHash(stream));
+
+            blocks.Add(hash);
 
             return new AsarArchiveFileIntegrity()
                 {BlockSize = InternalBlockSize, Algorithm = InternalAlgorithmName, Blocks = blocks.ToArray(), Hash = hash};
