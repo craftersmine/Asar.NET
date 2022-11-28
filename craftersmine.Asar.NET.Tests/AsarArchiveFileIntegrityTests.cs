@@ -5,8 +5,8 @@ namespace craftersmine.Asar.NET.Tests
     [TestClass]
     public class AsarArchiveFileIntegrityTests
     {
-        public const string DataHash = "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855";
-        public const string BlockHash = "88E0700AE7D36F20FF85008B0E644B79C1A58F5AE29594960725DCA2EEBD6AAE";
+        public const string DataHash = "40AFF2E9D2D8922E47AFD4648E6967497158785FBD1DA870E7110266BF944880";
+        public const string BlockHash = "40AFF2E9D2D8922E47AFD4648E6967497158785FBD1DA870E7110266BF944880";
 
         [TestMethod]
         public async Task GetFileIntegrityTests()

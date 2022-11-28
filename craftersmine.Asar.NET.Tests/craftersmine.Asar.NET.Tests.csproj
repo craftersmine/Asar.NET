@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -17,6 +17,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\craftersmine.Asar.Net\craftersmine.Asar.Net.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestsInput\packthis-unpack.asar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestsInput\packthis-unpack.asar.unpacked\dir2\file2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
