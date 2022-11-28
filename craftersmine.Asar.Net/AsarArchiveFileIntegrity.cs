@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace craftersmine.Asar.Net
 {
@@ -21,22 +20,22 @@ namespace craftersmine.Asar.Net
         /// <summary>
         /// Gets file block size
         /// </summary>
-        [JsonPropertyName("blockSize")]
+        [JsonProperty("blockSize")]
         public int BlockSize { get; private set; }
         /// <summary>
         /// Gets file hashing algorithm
         /// </summary>
-        [JsonPropertyName("algorithm")]
+        [JsonProperty("algorithm")]
         public string Algorithm { get; private set; }
         /// <summary>
         /// Gets whole file hash
         /// </summary>
-        [JsonPropertyName("hash")]
+        [JsonProperty("hash")]
         public string Hash { get; private set; }
         /// <summary>
         /// Gets hashes for file blocks of specified size
         /// </summary>
-        [JsonPropertyName("blocks")]
+        [JsonProperty("blocks")]
         public string[] Blocks { get; private set; }
 
         private AsarArchiveFileIntegrity() {}
