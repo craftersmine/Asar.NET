@@ -1,10 +1,13 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 
 namespace craftersmine.Asar.Net
 {
+    /// <summary>
+    /// Represents an ASAR archive file
+    /// </summary>
     public class AsarArchiveFile
     {
         [JsonProperty("offset")]
