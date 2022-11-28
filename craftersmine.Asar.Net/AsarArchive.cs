@@ -146,7 +146,17 @@ namespace craftersmine.Asar.Net
         }
 
         /// <summary>
-        /// Opens an file that located in archive as stream
+        /// Opens a file with specified location within archive as stream
+        /// </summary>
+        /// <param name="path">Path to file within archive</param>
+        /// <returns><see cref="AsarFileStream"/> if file is packed or <see cref="FileStream"/> if file is unpacked</returns>
+        public Stream OpenFileAsStream(string path)
+        {
+            AsarArchiveFile file = FindFile(path);
+            return OpenFileAsStream(file);
+        }
+        /// <summary>
+        /// Opens a file that located in archive as stream
         /// </summary>
         /// <param name="file">File to read as stream</param>
         /// <returns><see cref="AsarFileStream"/> if file is packed or <see cref="FileStream"/> if file is unpacked</returns>
