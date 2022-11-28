@@ -24,6 +24,9 @@ namespace craftersmine.Asar.NET.Tests
             byte[] data = new byte[stream.Length];
             int read = stream.Read(data, 0, data.Length);
             string dataString = Encoding.Default.GetString(data);
+
+            byte[] dataFile0 = await archive.ReadBytesAsync("file0.txt");
+            string dataStringFile0 = Encoding.Default.GetString(dataFile0);
         }
     }
 }
