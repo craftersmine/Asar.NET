@@ -7,7 +7,10 @@ using Newtonsoft.Json;
 
 namespace craftersmine.Asar.Net
 {
-    public class AsarArchive
+    /// <summary>
+    /// Represents an Electron ASAR archive
+    /// </summary>
+    public partial class AsarArchive : IDisposable
     {
         private Stream archiveStream;
 
