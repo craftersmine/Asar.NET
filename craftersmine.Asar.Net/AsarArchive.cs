@@ -26,18 +26,22 @@ namespace craftersmine.Asar.Net
         /// Gets a size of the header metadata
         /// </summary>
         public long HeaderSize => headerMetadataSize;
+
         /// <summary>
         /// Gets an offset value where in the archive actual archived files data starts
         /// </summary>
         public int FilesDataOffset => filesOffset;
+
         /// <summary>
         /// Gets a <see langword="true"/> if archive loaded from file, otherwise <see langword="false"/>
         /// </summary>
         public bool IsFile { get; private set; }
+
         /// <summary>
         /// Gets a path to archive file or empty string if archive was loaded from file
         /// </summary>
         public string FilePath { get; private set; } = string.Empty;
+
         /// <summary>
         /// Gets a path to unpacked files of this ASAR archive
         /// </summary>
@@ -53,6 +57,7 @@ namespace craftersmine.Asar.Net
                 return path;
             }
         }
+
         /// <summary>
         /// Gets packed files metadata, such as file sizes, offsets, integrity data, etc.
         /// </summary>
@@ -106,13 +111,23 @@ namespace craftersmine.Asar.Net
             archiveStream?.Dispose();
         }
 
-        public async Task<byte[]> ReadBytesFromFileAsync(string path)
+        /// <summary>
+        /// Reads all bytes of ASAR archived file byt specified path within archive into <see cref="byte"/> array
+        /// </summary>
+        /// <param name="path">Path to file within ASAR archive</param>
+        /// <returns>An array of <see cref="byte"/> from file</returns>
+        public async Task<byte[]> ReadBytesAsync(string path)
         {
             AsarArchiveFile file = FindFile(path);
-            return await ReadBytes(file);
+            return await ReadBytesAsync(file);
         }
 
-        public async Task<byte[]> ReadBytes(AsarArchiveFile file)
+        /// <summary>
+        /// Reads all bytes of ASAR archived file into <see cref="byte"/> array
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns>An array of <see cref="byte"/> from file</returns>
+        public async Task<byte[]> ReadBytesAsync(AsarArchiveFile file)
         {
             byte[] data = new byte[file.Size];
 
@@ -127,6 +142,11 @@ namespace craftersmine.Asar.Net
             return data;
         }
 
+        /// <summary>
+        /// Opens an file that located in archive as stream
+        /// </summary>
+        /// <param name="file">File to read as stream</param>
+        /// <returns><see cref="AsarFileStream"/> if file is packed or <see cref="FileStream"/> if file is unpacked</returns>
         public Stream OpenFileAsStream(AsarArchiveFile file)
         {
             if (file.IsUnpacked)
