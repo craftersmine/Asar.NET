@@ -12,7 +12,10 @@ namespace craftersmine.Asar.Net
     /// </summary>
     public partial class AsarArchive : IDisposable
     {
-        // represents size of header whole size of ASAR header integer, but since it is 4 bytes long, we can assume that it is ASAR 
+        // represents size of header whole size of ASAR header integer,
+        // but since it is 4 bytes long and integer next to it has size of 4,
+        // first 4 bytes will be (most of the time and until something changes) 04 00 00 00,
+        // so we can assume that it is ASAR based on these bytes
         private static readonly byte[] Signature = new byte[] {0x04, 0x00, 0x00, 0x00};
 
         private int headerSize;
