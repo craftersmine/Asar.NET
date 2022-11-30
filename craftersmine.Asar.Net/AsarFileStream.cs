@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace craftersmine.Asar.Net
 {
@@ -116,6 +118,52 @@ namespace craftersmine.Asar.Net
         public override void Write(byte[] buffer, int offset, int count)
         {
             throw new NotSupportedException("Writing to an already packed ASAR archive is not supported");
+        }
+
+        /// <inheritdoc cref="Stream.CopyTo(Stream)"/>
+        public new void CopyTo(Stream destination)
+        {
+            CopyTo(destination, 81920);
+        }
+
+        /// <inheritdoc cref="Stream.CopyTo(Stream, int)"/>
+        public new void CopyTo(Stream destination, int bufferSize)
+        {
+            long lengthToCopy = Length;
+            byte[] buffer = new byte[bufferSize];
+            int read;
+            while (lengthToCopy > 0 && 
+                   (read = Read(buffer, 0, Math.Min(buffer.Length, (int)lengthToCopy))) > 0)
+            {
+                destination.Write(buffer, 0, read);
+                lengthToCopy -= read;
+            }
+        }
+        
+        /// <inheritdoc cref="Stream.CopyToAsync(Stream)"/>
+        public new async Task CopyToAsync(Stream destination)
+        {
+            await CopyToAsync(destination, 81920, CancellationToken.None);
+        }
+        
+        /// <inheritdoc cref="Stream.CopyToAsync(Stream,int)"/>
+        public new async Task CopyToAsync(Stream destination, int bufferSize)
+        {
+            await CopyToAsync(destination, bufferSize, CancellationToken.None);
+        }
+
+        /// <inheritdoc cref="Stream.CopyToAsync(Stream,int,CancellationToken)"/>
+        public new async Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken)
+        {
+            long lengthToCopy = Length;
+            byte[] buffer = new byte[bufferSize];
+            int read;
+            while (lengthToCopy > 0 && 
+                   (read = await ReadAsync(buffer, 0, Math.Min(buffer.Length, (int)lengthToCopy), cancellationToken).ConfigureAwait(false)) > 0)
+            {
+                await destination.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
+                lengthToCopy -= read;
+            }
         }
     }
 }
