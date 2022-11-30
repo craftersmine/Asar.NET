@@ -51,7 +51,7 @@ namespace craftersmine.Asar.Net
         /// Gets <see langword="true"/> if file is an actual file and not a directory
         /// </summary>
         [JsonIgnore]
-        public bool IsFile { get; internal set; }
+        internal bool IsFile { get; set; }
         /// <summary>
         /// Gets name of file in ASAR archive
         /// </summary>
