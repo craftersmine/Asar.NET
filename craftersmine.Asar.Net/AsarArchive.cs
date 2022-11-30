@@ -155,6 +155,7 @@ namespace craftersmine.Asar.Net
             AsarArchiveFile file = FindFile(path);
             return OpenFileAsStream(file);
         }
+
         /// <summary>
         /// Opens a file that located in archive as stream
         /// </summary>
