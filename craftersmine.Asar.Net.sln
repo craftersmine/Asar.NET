@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "craftersmine.Asar.Net", "craftersmine.Asar.Net\craftersmine.Asar.Net.csproj", "{EE3A3180-05B4-41DA-A56D-AD6E18FB6908}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "craftersmine.Asar.NET.Tests", "craftersmine.Asar.NET.Tests\craftersmine.Asar.NET.Tests.csproj", "{ADEB7DA4-FAA3-478F-A86A-F1A1DA5A5879}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "craftersmine.Asar.Net.Tests", "craftersmine.Asar.Net.Tests\craftersmine.Asar.Net.Tests.csproj", "{ADEB7DA4-FAA3-478F-A86A-F1A1DA5A5879}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
