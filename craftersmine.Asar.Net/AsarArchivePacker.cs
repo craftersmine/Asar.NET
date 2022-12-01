@@ -32,11 +32,11 @@ namespace craftersmine.Asar.Net
         /// <summary>
         /// Occurs when packing status is changed
         /// </summary>
-        public event EventHandler<AsarPackingEventArgs> OnStatusChanged;
+        public event EventHandler<AsarPackingEventArgs> StatusChanged;
         /// <summary>
         /// Occurs when ASAR archive is packed successfully
         /// </summary>
-        public event EventHandler<AsarPackingCompletedEventArgs> OnAsarArchivePacked; 
+        public event EventHandler<AsarPackingCompletedEventArgs> AsarArchivePacked; 
 
         /// <summary>
         /// Creates ASAR archive packer from specified data
@@ -63,7 +63,7 @@ namespace craftersmine.Asar.Net
             // build output file path
             outputFilePath = Path.Combine(PackerData.OutputDirectoryPath, PackerData.ArchiveName + ".asar");
             outputUnpackedPath = outputFilePath + ".unpacked";
-            OnStatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.CreatingHeader, null));
+            StatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.CreatingHeader, null));
 
             // create archive file structure
             AsarArchiveFile archiveHeaderData = await BuildArchiveHeaderAsync();
@@ -75,12 +75,12 @@ namespace craftersmine.Asar.Net
             // sort files in archive if it is required
             if (PackerData.PerformSort)
             {
-                OnStatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.Sorting, null));
+                StatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.Sorting, null));
                 SortFiles(archiveHeaderData);
             }
 
             // serialize header into json and get byte array from string
-            OnStatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.SerializingHeader, null));
+            StatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.SerializingHeader, null));
             string archiveHeaderJson = JsonConvert.SerializeObject(archiveHeaderData);
             this.archiveHeader = Encoding.UTF8.GetBytes(archiveHeaderJson);
             archiveHeaderSize = this.archiveHeader.Length;
@@ -89,7 +89,7 @@ namespace craftersmine.Asar.Net
             archiveStream = File.Create(outputFilePath);
             
             // write asar header to file stream
-            OnStatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.WritingHeader, null));
+            StatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.WritingHeader, null));
             await Task.Run(() =>
             {
                 BinaryWriter headerWriter = new BinaryWriter(archiveStream);
@@ -105,14 +105,14 @@ namespace craftersmine.Asar.Net
 
             // close when all files are writen
             archiveStream.Close();
-            OnStatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.Completed, null));
+            StatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.Completed, null));
 
             // if we subscribed to OnAsarArchivePacked
-            if (!(OnAsarArchivePacked is null))
+            if (!(AsarArchivePacked is null))
             {
                 // open created asar archive and invoke events
                 AsarArchive arc = new AsarArchive(outputFilePath);
-                OnAsarArchivePacked?.Invoke(this, new AsarPackingCompletedEventArgs(outputFilePath, arc));
+                AsarArchivePacked?.Invoke(this, new AsarPackingCompletedEventArgs(outputFilePath, arc));
             }
         }
 
@@ -142,7 +142,7 @@ namespace craftersmine.Asar.Net
             }
             
             currentFileProcessing++;
-            OnStatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.Packing, file));
+            StatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.Packing, file));
             // if it is file
             if (file.IsFile)
             {
