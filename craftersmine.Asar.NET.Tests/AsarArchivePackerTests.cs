@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,11 +25,43 @@ namespace craftersmine.Asar.Net.Tests
         public void TestInitialize()
         {
             AsarArchivePackerData = AsarArchivePackerDataBuilder
-                .CreateBuilder(AsarArchiveOutputDir, AsarArchiveName).AddDirectory(TestPackDir1, true, true)
-                .AddDirectory(TestPackDir2, true, true).AddFiles(true, true, TestEmptyFile, TestFile0)
+                .CreateBuilder(AsarArchiveOutputDir, AsarArchiveName).AddDirectory(TestPackDir1, false, true)
+                .AddDirectory(TestPackDir2, true, true).AddFiles(false, true, TestEmptyFile, TestFile0)
                 .CreateArchiveData();
 
             Assert.IsNotNull(AsarArchivePackerData, "Archive packer data is null");
+
+            Debug.WriteLine("Cleaning up before packing...");
+            if (Directory.Exists(AsarArchiveOutputDir))
+                Directory.Delete(AsarArchiveOutputDir, true);
         }
+
+        [TestMethod]
+        public async Task PackArchiveTests()
+        {
+            AsarArchivePacker packer = new AsarArchivePacker(AsarArchivePackerData);
+            Assert.IsNotNull(packer, "Packer is not created!");
+
+            packer.StatusChanged += Packer_StatusChanged;
+            packer.AsarArchivePacked += Packer_AsarArchivePacked;
+
+            Assert.AreEqual(AsarArchivePackerData, packer.PackerData);
+
+            await packer.PackAsync();
+        }
+
+        private void Packer_AsarArchivePacked(object? sender, AsarPackingCompletedEventArgs e)
+        {
+            Assert.IsNotNull(e.PackedArchive, "There is no opened ASAR archive after packing");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(e.AsarFilePath), "Packed ASAR file path is null or empty");
+            Debug.WriteLine("ASAR output file: " + e.AsarFilePath);
+        }
+
+        private void Packer_StatusChanged(object? sender, AsarPackingEventArgs e)
+        {
+            Debug.WriteLine("Status: {2}. Packing {0} into {1}.", e.CurrentFileData?.GetPathInArchive(), e.FilePath, e.PackingStatus);
+        }
+
+
     }
 }
