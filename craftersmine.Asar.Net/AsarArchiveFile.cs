@@ -145,8 +145,6 @@ namespace craftersmine.Asar.Net
 
             AsarArchiveFile other = obj as AsarArchiveFile;
 
-            bool equal = false;
-
             if (other.Files is null)
                 return false;
 
