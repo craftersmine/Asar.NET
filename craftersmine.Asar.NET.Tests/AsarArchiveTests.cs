@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,7 +49,7 @@ namespace craftersmine.Asar.Net.Tests
             AsarArchiveFileIntegrity file3Integrity = file3.Integrity;
             Assert.IsNotNull(file3Integrity, "dir2\\file3.txt integrity data is missing");
             Assert.AreEqual("SHA256", file3Integrity.Algorithm, "dir2\\file3.txt hashing algorithm is not SHA256");
-            Assert.AreEqual("a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", file3Integrity.Hash.Length, "dir2\\file3.txt hashes mismatched in integrity data");
+            Assert.AreEqual("a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", file3Integrity.Hash, "dir2\\file3.txt hashes mismatched in integrity data");
             Assert.AreEqual(4194304, file3Integrity.BlockSize, "dir2\\file3.txt integrity block data is not 4MB (4194304)");
             Assert.IsNotNull(file3Integrity.Blocks, "dir2\\file3.txt integrity data missing blocks data");
             Assert.IsTrue(file3Integrity.Blocks.Any(), "dir2\\file3.txt integrity data does not contain any block integrity data");
