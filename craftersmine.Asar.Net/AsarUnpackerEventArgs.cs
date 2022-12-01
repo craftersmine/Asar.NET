@@ -5,13 +5,27 @@ using System.Text;
 
 namespace craftersmine.Asar.Net
 {
+    /// <summary>
+    /// Contains <see cref="AsarArchiveUnpacker.StatusChanged"/> event arguments
+    /// </summary>
     public class AsarUnpackingStatusChangedEventArgs : EventArgs
     {
+        /// <summary>
+        /// Gets total amount of files to be unpacked
+        /// </summary>
         public int TotalFiles { get; private set; }
+        /// <summary>
+        /// Gets current file index that is unpacking
+        /// </summary>
         public int CurrentFile { get; private set; }
+        /// <summary>
+        /// Gets current file output path
+        /// </summary>
         public string OutputFilePath { get; private set; }
+        /// <summary>
+        /// Gets current file data within ASAR archive
+        /// </summary>
         public AsarArchiveFile CurrentFileData { get; private set; }
-        //public AsarUnpackingStatus Status { get; private set; }
 
         internal AsarUnpackingStatusChangedEventArgs(int totalFiles, int currentFile, string outputFilePath, AsarArchiveFile currentFileData)
         {
@@ -21,21 +35,24 @@ namespace craftersmine.Asar.Net
             CurrentFileData = currentFileData;
         }
     }
-
+    
+    /// <summary>
+    /// Contains <see cref="AsarArchiveUnpacker.AsarArchiveUnpacked"/> event arguments
+    /// </summary>
     public class AsarUnpackingCompletedEventArgs : EventArgs
     {
-        public string OutputDirectoryPath { get; private set; }
+        /// <summary>
+        /// Gets output directory of unpacked archive
+        /// </summary>
+        public string OutputDirectoryPath => OutputDirectory.FullName;
+        /// <summary>
+        /// Gets information about output directory of unpacked archive
+        /// </summary>
         public DirectoryInfo OutputDirectory { get; private set; }
 
-        internal AsarUnpackingCompletedEventArgs(string outputDirectoryPath, DirectoryInfo outputDirectory)
+        internal AsarUnpackingCompletedEventArgs(DirectoryInfo outputDirectory)
         {
-            OutputDirectoryPath = outputDirectoryPath;
             OutputDirectory = outputDirectory;
         }
     }
-
-    //public enum AsarUnpackingStatus
-    //{
-
-    //}
 }
