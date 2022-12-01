@@ -84,7 +84,10 @@ namespace craftersmine.Asar.Net
             string archiveHeaderJson = JsonConvert.SerializeObject(archiveHeaderData);
             this.archiveHeader = Encoding.UTF8.GetBytes(archiveHeaderJson);
             archiveHeaderSize = this.archiveHeader.Length;
-            
+
+            if (!Directory.Exists(PackerData.OutputDirectoryPath))
+                Directory.CreateDirectory(PackerData.OutputDirectoryPath);
+
             // create output file and open file stream
             archiveStream = File.Create(outputFilePath);
             
