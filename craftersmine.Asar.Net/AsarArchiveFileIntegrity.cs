@@ -151,6 +151,9 @@ namespace craftersmine.Asar.Net
 
             AsarArchiveFileIntegrity other = (AsarArchiveFileIntegrity)obj;
 
+            if (other.Blocks is null)
+                return false;
+
             return this.Algorithm == other.Algorithm && this.BlockSize == other.BlockSize && this.Hash == other.Hash && this.Blocks.SequenceEqual(other.Blocks);
         }
 

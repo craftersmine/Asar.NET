@@ -147,6 +147,9 @@ namespace craftersmine.Asar.Net
 
             bool equal = false;
 
+            if (other.Files is null)
+                return false;
+
             return this.Files.SequenceEqual(other.Files) && this.IsRoot == other.IsRoot &&
                    this.IsUnpacked == other.IsUnpacked && this.IsExecutable == other.IsExecutable &&
                    this.IsLink == other.IsLink && this.Integrity == other.Integrity && this.Offset == other.Offset &&
