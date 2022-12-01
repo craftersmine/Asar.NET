@@ -178,6 +178,11 @@ namespace craftersmine.Asar.Net
         /// <returns></returns>
         public AsarArchiveFile FindFile(string path)
         {
+            if (path.StartsWith("\\") || path.StartsWith(Path.DirectorySeparatorChar.ToString()) || path.StartsWith(Path.AltDirectorySeparatorChar.ToString()))
+                path = path.Substring(1);
+            if (path.EndsWith("\\") || path.EndsWith(Path.DirectorySeparatorChar.ToString()) || path.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+                path = path.Remove(path.Length - 1);
+
             string[] dirs = Path.GetDirectoryName(path)?.Split(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
 
             if (dirs is null || dirs.Length == 0) return Files.Files.FirstOrDefault(f => f.Key == path).Value;
