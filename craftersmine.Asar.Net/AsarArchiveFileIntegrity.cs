@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -138,6 +138,37 @@ namespace craftersmine.Asar.Net
                 if (streamIntegrity.Blocks[i] != integrityData.Blocks[i]) return false;
 
             return true;
+        }
+
+        /// <inheritdoc cref="object.Equals(object)"/>
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+                return false;
+
+            if (!(obj is AsarArchiveFileIntegrity))
+                return false;
+
+            AsarArchiveFileIntegrity other = (AsarArchiveFileIntegrity)obj;
+
+            return this.Algorithm == other.Algorithm && this.BlockSize == other.BlockSize && this.Hash == other.Hash && this.Blocks.SequenceEqual(other.Blocks);
+        }
+
+        /// <inheritdoc cref="object.GetHashCode()"/>
+        public override int GetHashCode()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Algorithm);
+            sb.Append(BlockSize);
+            sb.Append(Hash);
+            sb.Append(Blocks.GetHashCode());
+            return sb.ToString().GetHashCode();
+        }
+
+        /// <inheritdoc cref="object.ToString()"/>
+        public override string ToString()
+        {
+            return Hash;
         }
 
         private static string ByteArrayToString(byte[] bytes)
