@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -133,5 +133,45 @@ namespace craftersmine.Asar.Net
         /// </summary>
         /// <returns></returns>
         public bool ShouldSerializeSize() => IsFile;
+
+        /// <inheritdoc cref="object.Equals(object)"/>
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+                return false;
+
+            if (!(obj is AsarArchiveFile))
+                return false;
+
+            AsarArchiveFile other = obj as AsarArchiveFile;
+
+            bool equal = false;
+
+            return this.Files.SequenceEqual(other.Files) && this.IsRoot == other.IsRoot &&
+                   this.IsUnpacked == other.IsUnpacked && this.IsExecutable == other.IsExecutable &&
+                   this.IsLink == other.IsLink && this.Integrity == other.Integrity && this.Offset == other.Offset &&
+                   this.Size == other.Size && this.Name == other.Name && this.Parent == other.Parent;
+        }
+
+        /// <inheritdoc cref="object.GetHashCode()"/>
+        public override int GetHashCode()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Name);
+            sb.Append(Offset);
+            sb.Append(Size);
+            sb.Append(FilePath);
+            sb.Append(IsUnpacked);
+            sb.Append(IsExecutable);
+            sb.Append(IsLink);
+            sb.Append(Integrity);
+            return sb.ToString().GetHashCode();
+        }
+
+        /// <inheritdoc cref="object.ToString()"/>
+        public override string ToString()
+        {
+            return "Asar file: { Path = " + GetPathInArchive() + ", Offset = " + Offset + ", Size = " + Size + ", Is Unpacked = " + IsUnpacked + " }";
+        }
     }
 }
