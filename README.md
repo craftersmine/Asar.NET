@@ -1,10 +1,10 @@
 # Asar.NET
 .NET library for opening, unpacking and packing of Electron ASAR archives
 
-![GitHub License](https://img.shields.io/github/license/craftersmine/Asar.Net) 
-![Nuget](https://img.shields.io/nuget/v/craftersmine.Asar.NET?logo=nuget) 
-![Nuget Downloads](https://img.shields.io/nuget/dt/craftersmine.Asar.NET?logo=nuget&label=nuget%20downloads) 
-![GitHub all releases](https://img.shields.io/github/downloads/craftersmine/Asar.NET/total?logo=github&label=github%20downloads)
+[![GitHub License](https://img.shields.io/github/license/craftersmine/Asar.Net)](https://github.com/craftersmine/Asar.NET/tree/master/LICENSE)
+[![Nuget](https://img.shields.io/nuget/v/craftersmine.Asar.NET?logo=nuget)](https://www.nuget.org/packages/craftersmine.Asar.Net/)
+[![Nuget Downloads](https://img.shields.io/nuget/dt/craftersmine.Asar.NET?logo=nuget&label=nuget%20downloads)](https://www.nuget.org/packages/craftersmine.Asar.Net/)
+[![GitHub all releases](https://img.shields.io/github/downloads/craftersmine/Asar.NET/total?logo=github&label=github%20downloads)](https://github.com/craftersmine/Asar.NET/releases)
 [![GitHub Project Wiki](https://img.shields.io/badge/docs-github--wiki-brightgreen)](https://github.com/craftersmine/Asar.NET/wiki)
 ![Discord](https://img.shields.io/badge/discord-craftersmine%237441-5865f2?logo=discord&logoColor=white)
 ![GitHub Repo stars](https://img.shields.io/github/stars/craftersmine/Asar.NET)
