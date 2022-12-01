@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +11,6 @@ namespace craftersmine.Asar.Net.Tests
     public class AsarArchiveTests
     {
         public const string AsarArchivePath = "TestsInput\\packthis-unpack.asar";
-
-        public TestContext TestContext { get; set; }
 
         public AsarArchive Archive { get; set; }
 
