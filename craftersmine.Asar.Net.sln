@@ -7,6 +7,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "craftersmine.Asar.Net", "cr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "craftersmine.Asar.Net.Tests", "craftersmine.Asar.Net.Tests\craftersmine.Asar.Net.Tests.csproj", "{ADEB7DA4-FAA3-478F-A86A-F1A1DA5A5879}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository Files", "Repository Files", "{C3F455FC-D748-474A-8F12-1B4DE2A99A4B}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{77E9C15F-B3EB-4765-AB50-ECB13A1CBC18}"
+	ProjectSection(SolutionItems) = preProject
+		.github\FUNDING.yml = .github\FUNDING.yml
+		.github\logo.png = .github\logo.png
+		.github\logo.svg = .github\logo.svg
+		.github\RepositoryPreview.png = .github\RepositoryPreview.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATES", "ISSUE_TEMPLATES", "{0E2E4CB4-6D4A-46EF-A436-E5BA41563B20}"
+	ProjectSection(SolutionItems) = preProject
+		.github\ISSUE_TEMPLATE\bug_report.md = .github\ISSUE_TEMPLATE\bug_report.md
+		.github\ISSUE_TEMPLATE\feature_request.md = .github\ISSUE_TEMPLATE\feature_request.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +45,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{77E9C15F-B3EB-4765-AB50-ECB13A1CBC18} = {C3F455FC-D748-474A-8F12-1B4DE2A99A4B}
+		{0E2E4CB4-6D4A-46EF-A436-E5BA41563B20} = {77E9C15F-B3EB-4765-AB50-ECB13A1CBC18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8F76B6F0-C141-49BD-B84C-CD4A7DF7C38C}
