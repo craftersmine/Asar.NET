@@ -1,4 +1,4 @@
-namespace craftersmine.Asar.NET.Tests
+namespace craftersmine.Asar.Net.Tests
 {
     public static class Data
     {

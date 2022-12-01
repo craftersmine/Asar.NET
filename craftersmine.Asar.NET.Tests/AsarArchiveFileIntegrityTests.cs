@@ -1,6 +1,6 @@
 using craftersmine.Asar.Net;
 
-namespace craftersmine.Asar.NET.Tests
+namespace craftersmine.Asar.Net.Tests
 {
     [TestClass]
     public class AsarArchiveFileIntegrityTests

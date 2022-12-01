@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using craftersmine.Asar.Net;
 
-namespace craftersmine.Asar.NET.Tests
+namespace craftersmine.Asar.Net.Tests
 {
     [TestClass]
     public class AsarArchiveTests
