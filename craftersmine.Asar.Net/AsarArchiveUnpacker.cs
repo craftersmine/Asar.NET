@@ -76,6 +76,18 @@ namespace craftersmine.Asar.Net
         /// <exception cref="ArgumentNullException">When file path in archive or output file path is null or empty</exception>
         public async Task UnpackFileAsync(string pathInArchive, string outputFilePath)
         {
+            await UnpackFileAsync(pathInArchive, outputFilePath, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Unpacks file with specified path in archive to output file path
+        /// </summary>
+        /// <param name="pathInArchive">File path within ASAR archive</param>
+        /// <param name="outputFilePath">Path to the output file</param>
+        /// <param name="cancellationToken">Cancellation token for async operation</param>
+        /// <exception cref="ArgumentNullException">When file path in archive or output file path is null or empty</exception>
+        public async Task UnpackFileAsync(string pathInArchive, string outputFilePath, CancellationToken cancellationToken)
+        {
             if (string.IsNullOrWhiteSpace(pathInArchive))
                 throw new ArgumentNullException(nameof(pathInArchive));
             if (string.IsNullOrWhiteSpace(outputFilePath))
@@ -87,7 +99,7 @@ namespace craftersmine.Asar.Net
 
             using (FileStream fileStream = File.Create(outputFilePath))
             {
-                await UnpackFileAsync(pathInArchive, fileStream);
+                await UnpackFileAsync(pathInArchive, fileStream, cancellationToken);
             }
         }
 
@@ -99,10 +111,22 @@ namespace craftersmine.Asar.Net
         /// <exception cref="ArgumentNullException">When file path in archive is null or empty or output stream is null</exception>
         public async Task UnpackFileAsync(string pathInArchive, Stream outputStream)
         {
+            await UnpackFileAsync(pathInArchive, outputStream, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Unpacks file with specified path in archive to specified stream
+        /// </summary>
+        /// <param name="pathInArchive">File path within ASAR archive</param>
+        /// <param name="outputStream">Data stream to which unpack specified file</param>
+        /// <param name="cancellationToken">Cancellation token for async operation</param>
+        /// <exception cref="ArgumentNullException">When file path in archive is null or empty or output stream is null</exception>
+        public async Task UnpackFileAsync(string pathInArchive, Stream outputStream, CancellationToken cancellationToken)
+        {
             if (string.IsNullOrWhiteSpace(pathInArchive))
                 throw new ArgumentNullException(nameof(pathInArchive));
 
-            await UnpackFileAsync(Archive.FindFile(pathInArchive), outputStream);
+            await UnpackFileAsync(Archive.FindFile(pathInArchive), outputStream, cancellationToken);
         }
 
         /// <summary>
@@ -113,6 +137,18 @@ namespace craftersmine.Asar.Net
         /// <exception cref="ArgumentNullException">When specified file within ASAR archive is null or output file path is null or empty</exception>
         public async Task UnpackFileAsync(AsarArchiveFile file, string outputFilePath)
         {
+            await UnpackFileAsync(file, outputFilePath, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Unpacks specified file in archive to output file path
+        /// </summary>
+        /// <param name="file">File within ASAR archive</param>
+        /// <param name="outputFilePath">Path to the output file</param>
+        /// <param name="cancellationToken">Cancellation token for async operation</param>
+        /// <exception cref="ArgumentNullException">When specified file within ASAR archive is null or output file path is null or empty</exception>
+        public async Task UnpackFileAsync(AsarArchiveFile file, string outputFilePath, CancellationToken cancellationToken)
+        {
             if (string.IsNullOrWhiteSpace(outputFilePath))
                 throw new ArgumentNullException(nameof(outputFilePath));
 
@@ -122,7 +158,7 @@ namespace craftersmine.Asar.Net
 
             using (FileStream fileStream = File.Create(outputFilePath))
             {
-                await UnpackFileAsync(file, fileStream);
+                await UnpackFileAsync(file, fileStream, cancellationToken);
             }
         }
 
@@ -134,6 +170,19 @@ namespace craftersmine.Asar.Net
         /// <exception cref="ArgumentNullException">When specified file withing ASAR archive is null or output stream is null</exception>
         /// <exception cref="ArgumentException">When output stream for unpacked file is read-only</exception>
         public async Task UnpackFileAsync(AsarArchiveFile file, Stream outputStream)
+        {
+            await UnpackFileAsync(file, outputStream, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Unpacks specified file in archive to output stream
+        /// </summary>
+        /// <param name="file">File within ASAR archive</param>
+        /// <param name="outputStream">Data stream to which unpack specified file</param>
+        /// <param name="cancellationToken">Cancellation token for async operation</param>
+        /// <exception cref="ArgumentNullException">When specified file withing ASAR archive is null or output stream is null</exception>
+        /// <exception cref="ArgumentException">When output stream for unpacked file is read-only</exception>
+        public async Task UnpackFileAsync(AsarArchiveFile file, Stream outputStream, CancellationToken cancellationToken)
         {
             if (file is null)
                 throw new ArgumentNullException(nameof(file));
@@ -147,14 +196,14 @@ namespace craftersmine.Asar.Net
             {
                 using (Stream fileStream = Archive.OpenFileAsStream(file))
                 {
-                    await fileStream.CopyToAsync(outputStream);
+                    await fileStream.CopyToAsync(outputStream, 81920, cancellationToken);
                 }
             }
             else
             {
                 using (AsarFileStream fileStream = Archive.OpenFileAsStream(file) as AsarFileStream)
                 {
-                    await fileStream.CopyToAsync(outputStream);
+                    await fileStream.CopyToAsync(outputStream, 81920, cancellationToken);
                 }
             }
         }
