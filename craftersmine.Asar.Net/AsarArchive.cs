@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -121,8 +122,19 @@ namespace craftersmine.Asar.Net
         /// <returns>An array of <see cref="byte"/> from file</returns>
         public async Task<byte[]> ReadBytesAsync(string path)
         {
+            return await ReadBytesAsync(path, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Reads all bytes of ASAR archived file byt specified path within archive into <see cref="byte"/> array
+        /// </summary>
+        /// <param name="path">Path to file within ASAR archive</param>
+        /// <param name="cancellationToken">Cancellation token for async operation</param>
+        /// <returns>An array of <see cref="byte"/> from file</returns>
+        public async Task<byte[]> ReadBytesAsync(string path, CancellationToken cancellationToken)
+        {
             AsarArchiveFile file = FindFile(path);
-            return await ReadBytesAsync(file);
+            return await ReadBytesAsync(file, cancellationToken);
         }
 
         /// <summary>
@@ -131,6 +143,17 @@ namespace craftersmine.Asar.Net
         /// <param name="file"></param>
         /// <returns>An array of <see cref="byte"/> from file</returns>
         public async Task<byte[]> ReadBytesAsync(AsarArchiveFile file)
+        {
+            return await ReadBytesAsync(file, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Reads all bytes of ASAR archived file into <see cref="byte"/> array
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="cancellationToken">Cancellation token for async operation</param>
+        /// <returns>An array of <see cref="byte"/> from file</returns>
+        public async Task<byte[]> ReadBytesAsync(AsarArchiveFile file, CancellationToken cancellationToken)
         {
             byte[] data = new byte[file.Size];
 
