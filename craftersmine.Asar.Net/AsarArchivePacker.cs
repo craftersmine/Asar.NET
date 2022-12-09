@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -50,11 +51,20 @@ namespace craftersmine.Asar.Net
 
             PackerData = packerData;
         }
-
+        
         /// <summary>
         /// Packs ASAR archive with specified info
         /// </summary>
         public async Task PackAsync()
+        {
+            await PackAsync(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Packs ASAR archive with specified info
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token for async operation</param>
+        public async Task PackAsync(CancellationToken cancellationToken)
         {
             // Header size integer                                            | Header metadata size  
             // int                                 | int                      | int                                                    | int
@@ -101,10 +111,10 @@ namespace craftersmine.Asar.Net
                 headerWriter.Write(archiveHeaderSize + 4);
                 headerWriter.Write(archiveHeaderSize);
             });
-            await archiveStream.WriteAsync(this.archiveHeader, 0, archiveHeaderSize);
+            await archiveStream.WriteAsync(this.archiveHeader, 0, archiveHeaderSize, cancellationToken);
 
             // start writing files to asar recursively
-            await WriteFileToArchive(archiveHeaderData);
+            await WriteFileToArchive(archiveHeaderData, cancellationToken);
 
             // close when all files are writen
             archiveStream.Close();
@@ -132,7 +142,7 @@ namespace craftersmine.Asar.Net
             }
         }
 
-        private async Task WriteFileToArchive(AsarArchiveFile file)
+        private async Task WriteFileToArchive(AsarArchiveFile file, CancellationToken cancellationToken)
         {
             // check if "file" is a directory
             if (!(file.Files is null) && file.Files.Any())
@@ -140,7 +150,7 @@ namespace craftersmine.Asar.Net
                 // if it is and has files, write all files that this folder has in asar archive
                 foreach (AsarArchiveFile f in file.Files.Values)
                 {
-                    await WriteFileToArchive(f);
+                    await WriteFileToArchive(f, cancellationToken);
                 }
             }
             
@@ -155,7 +165,7 @@ namespace craftersmine.Asar.Net
                     // open file that is currently being packed and copy stream contents into asar archive stream
                     using (FileStream fileStream = File.OpenRead(file.FilePath))
                     {
-                        await fileStream.CopyToAsync(archiveStream);
+                        await fileStream.CopyToAsync(archiveStream, 81920, cancellationToken);
                     }
                 }
                 // if it is unpacked

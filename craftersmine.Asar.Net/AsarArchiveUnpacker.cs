@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace craftersmine.Asar.Net
@@ -47,7 +48,22 @@ namespace craftersmine.Asar.Net
         {
             this.outputDir = outputDir;
 
-            await UnpackFileAsyncInternal(Archive.Files);
+            await UnpackFileAsyncInternal(Archive.Files, CancellationToken.None);
+
+            AsarArchiveUnpacked?.Invoke(this, new AsarUnpackingCompletedEventArgs(new DirectoryInfo(this.outputDir)));
+        }
+
+        /// <summary>
+        /// Unpacks specified ASAR <see cref="Archive"/> into specified output directory
+        /// </summary>
+        /// <param name="outputDir">Path to the output directory</param>
+        /// <param name="cancellationToken">Cancellation token for async operation</param>
+        /// <returns></returns>
+        public async Task UnpackAsync(string outputDir, CancellationToken cancellationToken)
+        {
+            this.outputDir = outputDir;
+
+            await UnpackFileAsyncInternal(Archive.Files, cancellationToken);
 
             AsarArchiveUnpacked?.Invoke(this, new AsarUnpackingCompletedEventArgs(new DirectoryInfo(this.outputDir)));
         }
@@ -143,7 +159,7 @@ namespace craftersmine.Asar.Net
             }
         }
 
-        private async Task UnpackFileAsyncInternal(AsarArchiveFile file)
+        private async Task UnpackFileAsyncInternal(AsarArchiveFile file, CancellationToken cancellationToken)
         {
             currentFileIndex++;
             string filePath = Path.Combine(outputDir, file.GetPathInArchive());
@@ -155,7 +171,7 @@ namespace craftersmine.Asar.Net
 
                 foreach (AsarArchiveFile f in file.Files.Values)
                 {
-                    await UnpackFileAsyncInternal(f);
+                    await UnpackFileAsyncInternal(f, cancellationToken);
                 }
             }
             else
@@ -166,7 +182,7 @@ namespace craftersmine.Asar.Net
                     {
                         using (FileStream fileStream = File.Create(filePath))
                         {
-                            await asarFileStream?.CopyToAsync(fileStream);
+                            await asarFileStream?.CopyToAsync(fileStream, 81920, cancellationToken);
                         }
                     }
                 }
@@ -176,7 +192,7 @@ namespace craftersmine.Asar.Net
                     {
                         using (FileStream fileStream = File.Create(filePath))
                         {
-                            await asarFileStream.CopyToAsync(fileStream);
+                            await asarFileStream.CopyToAsync(fileStream, 81920, cancellationToken);
                         }
                     }
                 }
