@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<Version>1.0.0</Version>
+	<Version>1.0.1</Version>
 	<Authors>craftersmine</Authors>
 	<Description>.NET implementaion of Electron ASAR archive library</Description>
 	<Copyright>Copyright © craftersmine 2022</Copyright>
