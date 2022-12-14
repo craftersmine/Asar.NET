@@ -96,7 +96,7 @@ namespace craftersmine.Asar.Net
         public int GetFileCount()
         {
             int fileCount = 0;
-            if (!(Files is null) && Files.Any())
+            if (!(Files is null) && Size == 0)
             {
                 foreach (AsarArchiveFile f in Files.Values)
                 {
