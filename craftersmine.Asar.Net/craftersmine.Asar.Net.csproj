@@ -9,6 +9,7 @@
 	<Authors>craftersmine</Authors>
 	<Description>.NET implementaion of Electron ASAR archive library</Description>
 	<Copyright>Copyright © craftersmine 2022</Copyright>
+	<PackageProjectUrl>https://github.com/craftersmine/Asar.NET</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/craftersmine/Asar.NET</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
