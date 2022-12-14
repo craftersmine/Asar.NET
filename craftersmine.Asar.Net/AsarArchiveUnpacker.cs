@@ -16,6 +16,16 @@ namespace craftersmine.Asar.Net
     {
         private int currentFileIndex = 0;
         private string outputDir = string.Empty;
+        
+        /// <summary>
+        /// Gets <see langword="true"/> if packing process is paused
+        /// </summary>
+        public bool IsPaused { get; private set; }
+
+        /// <summary>
+        /// Gets <see langword="true"/> if packer is currently packing archive
+        /// </summary>
+        public bool IsUnpacking { get; private set; }
 
         /// <summary>
         /// Gets an ASAR archive that associated with this unpacker
@@ -41,6 +51,24 @@ namespace craftersmine.Asar.Net
         }
 
         /// <summary>
+        /// Pauses unpacking process
+        /// </summary>
+        public void Pause()
+        {
+            if (IsUnpacking)
+                IsPaused = true;
+        }
+
+        /// <summary>
+        /// Resumes unpacking process
+        /// </summary>
+        public void Resume()
+        {
+            if (IsPaused && IsUnpacking)
+                IsPaused = false;
+        }
+
+        /// <summary>
         /// Unpacks specified ASAR <see cref="Archive"/> into specified output directory
         /// </summary>
         /// <param name="outputDir">Path to the output directory</param>
@@ -51,6 +79,7 @@ namespace craftersmine.Asar.Net
             await UnpackFileAsyncInternal(Archive.Files, CancellationToken.None);
 
             AsarArchiveUnpacked?.Invoke(this, new AsarUnpackingCompletedEventArgs(new DirectoryInfo(this.outputDir)));
+            IsUnpacking = false;
         }
 
         /// <summary>
@@ -210,6 +239,20 @@ namespace craftersmine.Asar.Net
 
         private async Task UnpackFileAsyncInternal(AsarArchiveFile file, CancellationToken cancellationToken)
         {
+            IsUnpacking = true;
+
+            while (IsPaused)
+            {
+                try
+                {
+                    await Task.Delay(500, cancellationToken);
+                }
+                catch (TaskCanceledException)
+                {
+                    IsPaused = false;
+                }
+            }
+
             currentFileIndex++;
             string filePath = Path.Combine(outputDir, file.GetPathInArchive());
             StatusChanged?.Invoke(this, new AsarUnpackingStatusChangedEventArgs(Archive.Files.GetFileCount(), currentFileIndex, filePath, file));
