@@ -102,6 +102,8 @@ namespace craftersmine.Asar.Net
                 {
                     fileCount += f.GetFileCount();
                 }
+
+                fileCount++;
             }
             else
                 fileCount++;
