@@ -26,6 +26,16 @@ namespace craftersmine.Asar.Net
         private string outputUnpackedPath = string.Empty;
 
         /// <summary>
+        /// Gets <see langword="true"/> if packing process is paused
+        /// </summary>
+        public bool IsPaused { get; private set; }
+
+        /// <summary>
+        /// Gets <see langword="true"/> if packer is currently packing archive
+        /// </summary>
+        public bool IsPacking { get; private set; }
+
+        /// <summary>
         /// Gets current ASAR archive data for packer
         /// </summary>
         public AsarArchivePackerData PackerData { get; private set; }
@@ -142,8 +152,38 @@ namespace craftersmine.Asar.Net
             }
         }
 
+        /// <summary>
+        /// Pauses packing process
+        /// </summary>
+        public void Pause()
+        {
+            if (IsPacking)
+                IsPaused = true;
+        }
+
+        /// <summary>
+        /// Resumes packing process
+        /// </summary>
+        public void Resume()
+        {
+            if (IsPaused && IsPacking)
+                IsPaused = false;
+        }
+
         private async Task WriteFileToArchive(AsarArchiveFile file, CancellationToken cancellationToken)
         {
+            while (IsPaused)
+            {
+                try
+                {
+                    await Task.Delay(500, cancellationToken);
+                }
+                catch (TaskCanceledException)
+                {
+                    IsPaused = false;
+                }
+            }
+
             // check if "file" is a directory
             if (!(file.Files is null) && file.Files.Any())
             {
