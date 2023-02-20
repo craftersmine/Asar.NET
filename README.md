@@ -24,6 +24,8 @@ How to use this library can be found here:
 
 If you want a new feature for library [create new feature request issue](https://github.com/craftersmine/Asar.NET/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=)
 
+Feel free to contribute to project by reporting bugs, requesting features or making pull requests!
+
 ## Installation
 * Search for `craftersmine.Asar.Net` in NuGet explorer in Visual Studio (or your IDE)
 * Using NuGet Package Manager: ```PM> Install-Package craftersmine.Asar.Net```
