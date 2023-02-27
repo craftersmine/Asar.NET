@@ -1,5 +1,5 @@
 # Asar.NET
-.NET library for opening, unpacking and packing of Electron ASAR archives
+.NET/C# library for opening, unpacking and packing of Electron ASAR archives
 
 [![GitHub License](https://img.shields.io/github/license/craftersmine/Asar.Net)](https://github.com/craftersmine/Asar.NET/tree/master/LICENSE)
 [![Nuget](https://img.shields.io/nuget/v/craftersmine.Asar.NET?logo=nuget)](https://www.nuget.org/packages/craftersmine.Asar.Net/)
