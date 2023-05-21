@@ -57,6 +57,7 @@ namespace craftersmine.Asar.Net
         /// <param name="filePath">Path to the file</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFile(string filePath)
         {
             return AddFile(filePath, false, false);
@@ -68,6 +69,7 @@ namespace craftersmine.Asar.Net
         /// <param name="fileInfo">File info of the file</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFile(FileInfo fileInfo)
         {
             return AddFile(fileInfo, false, false);
@@ -79,8 +81,11 @@ namespace craftersmine.Asar.Net
         /// <param name="file">Pending file for packing</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFile(AsarArchivePendingFile file)
         {
+            if (!(Data.PendingFiles.FirstOrDefault(f => f.FileInfo.Name == file.FileInfo.Name) is null))
+                throw new AsarException(string.Format("File with name \"{0}\" is already at the archive root", file.FileInfo.Name));
             Data.PendingFilesInternal.Add(file);
             return Builder;
         }
@@ -92,6 +97,7 @@ namespace craftersmine.Asar.Net
         /// <param name="unpacked">Determines whether this file needs to be packed into ASAR file or left unpacked besides archive file</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFile(string filePath, bool unpacked)
         {
             FileInfo file = new FileInfo(filePath);
@@ -105,6 +111,7 @@ namespace craftersmine.Asar.Net
         /// <param name="unpacked">Determines whether this file needs to be packed into ASAR file or left unpacked besides archive file</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFile(FileInfo fileInfo, bool unpacked)
         {
             return AddFile(fileInfo, unpacked, false);
@@ -118,6 +125,7 @@ namespace craftersmine.Asar.Net
         /// <param name="calculateIntegrity">Determines whether integrity needs to be calculated for this file before packing</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFile(string filePath, bool unpacked, bool calculateIntegrity)
         {
             FileInfo file = new FileInfo(filePath);
@@ -132,10 +140,13 @@ namespace craftersmine.Asar.Net
         /// <param name="calculateIntegrity">Determines whether integrity needs to be calculated for this file before packing</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFile(FileInfo fileInfo, bool unpacked, bool calculateIntegrity)
         {
             if (!fileInfo.Exists)
                 throw new FileNotFoundException("File not found at specified location", fileInfo.FullName);
+            if (!(Data.PendingFiles.FirstOrDefault(f => f.FileInfo.Name == fileInfo.Name) is null))
+                throw new AsarException(string.Format("File with name \"{0}\" is already at the archive root", fileInfo.Name));
             AsarArchivePendingFile pendingFile = new AsarArchivePendingFile(fileInfo);
             pendingFile.IsUnpacked = unpacked;
             pendingFile.CalculateIntegrity = calculateIntegrity;
@@ -149,6 +160,7 @@ namespace craftersmine.Asar.Net
         /// <param name="filePaths">File paths of the files</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFiles(params string[] filePaths)
         {
             return AddFiles(false, filePaths);
@@ -160,6 +172,7 @@ namespace craftersmine.Asar.Net
         /// <param name="fileInfos">File infos of the files</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFiles(params FileInfo[] fileInfos)
         {
             return AddFiles(false, fileInfos);
@@ -171,8 +184,15 @@ namespace craftersmine.Asar.Net
         /// <param name="files">Pending files for packing</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFiles(params AsarArchivePendingFile[] files)
         {
+            foreach (AsarArchivePendingFile file in files)
+            {
+                if (!(Data.PendingFiles.FirstOrDefault(f => f.FileInfo.Name == file.FileInfo.Name) is null))
+                    throw new AsarException(string.Format("File with name \"{0}\" is already at the archive root",
+                        file.FileInfo.Name));
+            }
             Data.PendingFilesInternal.AddRange(files);
             return Builder;
         }
@@ -185,6 +205,7 @@ namespace craftersmine.Asar.Net
         /// <param name="calculateIntegrity">Determines whether integrity needs to be calculated for this file before packing</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFiles(bool unpacked, bool calculateIntegrity, params string[] filePaths)
         {
             foreach (string filePath in filePaths)
@@ -203,6 +224,7 @@ namespace craftersmine.Asar.Net
         /// <param name="calculateIntegrity">Determines whether integrity needs to be calculated for this file before packing</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFiles(bool unpacked, bool calculateIntegrity, params FileInfo[] fileInfos)
         {
             foreach (FileInfo fileInfo in fileInfos)
@@ -220,6 +242,7 @@ namespace craftersmine.Asar.Net
         /// <param name="unpacked">Determines whether this files needs to be packed into ASAR file or left unpacked besides archive file</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFiles(bool unpacked, params string[] filePaths)
         {
             return AddFiles(unpacked, false, filePaths);
@@ -232,6 +255,7 @@ namespace craftersmine.Asar.Net
         /// <param name="unpacked">Determines whether this files needs to be packed into ASAR file or left unpacked besides archive file</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="FileNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When file with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddFiles(bool unpacked, params FileInfo[] fileInfos)
         {
             return AddFiles(unpacked, false, fileInfos);
@@ -243,6 +267,7 @@ namespace craftersmine.Asar.Net
         /// <param name="directoryInfo">Directory info</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="DirectoryNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When directory with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddDirectory(DirectoryInfo directoryInfo)
         {
             return AddDirectory(directoryInfo, false);
@@ -254,6 +279,7 @@ namespace craftersmine.Asar.Net
         /// <param name="directoryPath">Directory path</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="DirectoryNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When directory with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddDirectory(string directoryPath)
         {
             return AddDirectory(directoryPath, false);
@@ -266,6 +292,7 @@ namespace craftersmine.Asar.Net
         /// <param name="unpacked"><see langword="true"/> if directory needs to remain unpacked</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="DirectoryNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When directory with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddDirectory(DirectoryInfo directoryInfo, bool unpacked)
         {
             return AddDirectory(directoryInfo, unpacked, false);
@@ -278,6 +305,7 @@ namespace craftersmine.Asar.Net
         /// <param name="unpacked"><see langword="true"/> if directory needs to remain unpacked</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="DirectoryNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When directory with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddDirectory(string directoryPath, bool unpacked)
         {
             return AddDirectory(directoryPath, unpacked, false);
@@ -291,11 +319,16 @@ namespace craftersmine.Asar.Net
         /// <param name="calculateIntegrity"><see langword="true"/> if integrity needs to be calculated for directory</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="DirectoryNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When directory with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddDirectory(DirectoryInfo directoryInfo, bool unpacked,
             bool calculateIntegrity)
         {
             if (!directoryInfo.Exists)
                 throw new DirectoryNotFoundException("Directory \"" + directoryInfo.FullName + "\" not found");
+
+            if (!(Data.PendingDirectories.FirstOrDefault(d => d.DirectoryInfo.Name == directoryInfo.Name) is null))
+                throw new AsarException(string.Format("Directory with name \"{0}\" is already at the archive root",
+                    directoryInfo.Name));
 
             AsarArchivePendingDirectory directory = new AsarArchivePendingDirectory(directoryInfo, unpacked, calculateIntegrity);
             Data.PendingDirectoriesInternal.Add(directory);
@@ -310,6 +343,7 @@ namespace craftersmine.Asar.Net
         /// <param name="calculateIntegrity"><see langword="true"/> if integrity needs to be calculated for directory</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="DirectoryNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When directory with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddDirectory(string directoryPath, bool unpacked, bool calculateIntegrity)
         {
             DirectoryInfo directory = new DirectoryInfo(directoryPath);
@@ -322,8 +356,13 @@ namespace craftersmine.Asar.Net
         /// <param name="directory">Directory information to add</param>
         /// <returns><see cref="AsarArchivePackerDataBuilder"/> for creating ASAR archive</returns>
         /// <exception cref="DirectoryNotFoundException">When specified file in array is not found</exception>
+        /// <exception cref="AsarException">When directory with same name is already at the archive root</exception>
         public AsarArchivePackerDataBuilder AddDirectory(AsarArchivePendingDirectory directory)
         {
+            if (!(Data.PendingDirectories.FirstOrDefault(d => d.DirectoryInfo.Name == directory.DirectoryInfo.Name) is null))
+                throw new AsarException(string.Format("Directory with name \"{0}\" is already at the archive root",
+                    directory.DirectoryInfo.Name));
+
             Data.PendingDirectoriesInternal.Add(directory);
             return Builder;
         }
