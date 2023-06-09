@@ -6,7 +6,7 @@
 [![Nuget Downloads](https://img.shields.io/nuget/dt/craftersmine.Asar.NET?logo=nuget&label=nuget%20downloads)](https://www.nuget.org/packages/craftersmine.Asar.Net/)
 [![GitHub all releases](https://img.shields.io/github/downloads/craftersmine/Asar.NET/total?logo=github&label=github%20downloads)](https://github.com/craftersmine/Asar.NET/releases)
 [![GitHub Project Wiki](https://img.shields.io/badge/docs-github--wiki-brightgreen)](https://github.com/craftersmine/Asar.NET/wiki)
-![Discord](https://img.shields.io/badge/discord-craftersmine%237441-5865f2?logo=discord&logoColor=white)
+![Discord](https://img.shields.io/badge/discord-craftersmine-5865f2?logo=discord&logoColor=white)
 ![GitHub Repo stars](https://img.shields.io/github/stars/craftersmine/Asar.NET)
 ![Maintenance](https://img.shields.io/maintenance/yes/2023)
 
