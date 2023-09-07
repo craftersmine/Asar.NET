@@ -92,18 +92,22 @@ namespace craftersmine.Asar.Net
         {
             _sha256CryptoServiceProvider.Initialize();
 
-            var blocks = new List<string>();
+            bool isEndOfStream = false;
+            List<string> blocks = new List<string>();
+            int currentOffset = 0;
 
             if (stream.Length > InternalBlockSize)
             {
                 while (stream.Position != stream.Length)
                 {
-                    byte[] buffer = new byte[InternalBlockSize];
-                    
-                    await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken);
-                    
+                    long blockToRead = InternalBlockSize;
+                    if (stream.Length - stream.Position < InternalBlockSize)
+                        blockToRead = stream.Length - stream.Position;
+                    byte[] buffer = new byte[blockToRead];
+                    isEndOfStream = await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken) == 0;
                     string block = ByteArrayToString(_sha256CryptoServiceProvider.ComputeHash(buffer));
                     blocks.Add(block);
+                    currentOffset += InternalBlockSize;
                 }
             }
 
@@ -112,12 +116,7 @@ namespace craftersmine.Asar.Net
             blocks.Add(hash);
 
             return new AsarArchiveFileIntegrity()
-            {
-                BlockSize = InternalBlockSize,
-                Algorithm = InternalAlgorithmName,
-                Blocks = blocks.ToArray(),
-                Hash = hash
-            };
+                {BlockSize = InternalBlockSize, Algorithm = InternalAlgorithmName, Blocks = blocks.ToArray(), Hash = hash};
         }
 
         /// <inheritdoc cref="ValidateFileAsync(string,craftersmine.Asar.Net.AsarArchiveFileIntegrity, CancellationToken)"/>
