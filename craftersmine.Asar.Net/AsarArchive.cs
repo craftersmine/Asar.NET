@@ -90,7 +90,7 @@ namespace craftersmine.Asar.Net
             string header = Encoding.UTF8.GetString(headerData);
 
             filesOffset = headerSize + 8;
-            Files = JsonConvert.DeserializeObject<AsarArchiveFile>(header);
+            Files = AsarArchiveFileJsonSerialezer.Deserialize(header);
             Files.IsRoot = true;
             PopulateParents(Files);
         }

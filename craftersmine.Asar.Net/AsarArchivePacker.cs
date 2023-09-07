@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace craftersmine.Asar.Net
 {
@@ -101,7 +99,7 @@ namespace craftersmine.Asar.Net
 
             // serialize header into json and get byte array from string
             StatusChanged?.Invoke(this, new AsarPackingEventArgs(totalFileCount, currentFileProcessing, outputFilePath, AsarPackingStatus.SerializingHeader, null));
-            string archiveHeaderJson = JsonConvert.SerializeObject(archiveHeaderData);
+            string archiveHeaderJson = AsarArchiveFileJsonSerialezer.Serialeze(archiveHeaderData);
             this.archiveHeader = Encoding.UTF8.GetBytes(archiveHeaderJson);
             archiveHeaderSize = this.archiveHeader.Length;
 
