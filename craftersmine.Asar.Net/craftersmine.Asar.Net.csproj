@@ -5,7 +5,7 @@
 	<RootNamespace>craftersmine.Asar.Net</RootNamespace>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<Version>1.0.4</Version>
+	<Version>1.0.5</Version>
 	<Authors>craftersmine</Authors>
 	<Description>.NET implementaion of Electron ASAR archive library</Description>
 	<Copyright>Copyright © craftersmine 2022</Copyright>
