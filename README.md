@@ -8,7 +8,7 @@
 [![GitHub Project Wiki](https://img.shields.io/badge/docs-github--wiki-brightgreen)](https://github.com/craftersmine/Asar.NET/wiki)
 ![Discord](https://img.shields.io/badge/discord-craftersmine-5865f2?logo=discord&logoColor=white)
 ![GitHub Repo stars](https://img.shields.io/github/stars/craftersmine/Asar.NET)
-![Maintenance](https://img.shields.io/maintenance/yes/2023)
+![Maintenance](https://img.shields.io/maintenance/yes/2025)
 
 ![Repository Preview](https://raw.githubusercontent.com/craftersmine/Asar.NET/master/.github/RepositoryPreview.png)
 
