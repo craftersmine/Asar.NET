@@ -14,10 +14,10 @@
 
 ## Supports:
 * Opening ASAR archives
-* Reading files data withing ASAR archive without unpacking
+* Reading files data within ASAR archive without unpacking
 * Creating new ASAR archives
-* Existing ASAR archives unpacking
-* Reading integrity data and validating files with this data
+* ASAR archives unpacking
+* Reading integrity data and validating files
 
 How to use this library can be found here:
 [Repository Wiki](https://github.com/craftersmine/Asar.NET/wiki)
